@@ -39,11 +39,36 @@ namespace Cas31.PageObjects.Qa.Rs
             }
         }
 
+        public IWebElement LinkRegister
+        {
+            get
+            {
+                IWebElement element;
+                try
+                {
+                    wait.Until(EC.ElementIsVisible(By.XPath("//div[@id='registerLinkPlaceholder']/a")));
+                    element = this.driver.FindElement(By.XPath("//div[@id='registerLinkPlaceholder']/a"));
+                } catch (Exception)
+                {
+                    element = null;
+                }
+                return element;
+            }
+        }
+
+
         public ListPage ClickOnListLink()
         {
             this.LinkListUsers?.Click();
             wait.Until(EC.ElementIsVisible(By.TagName("table")));
             return new ListPage(this.driver);
+        }
+
+        public RegisterPage ClickOnRegisterLink()
+        {
+            this.LinkRegister?.Click();
+            wait.Until(EC.ElementIsVisible(By.Name("ime")));
+            return new RegisterPage(this.driver);
         }
     }
 }
