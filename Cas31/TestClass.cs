@@ -8,6 +8,8 @@ using QaListPage = Cas31.PageObjects.Qa.Rs.ListPage;
 using QaRegisterPage = Cas31.PageObjects.Qa.Rs.RegisterPage;
 using ShopQaHomePage = Cas31.PageObjects.Shop.Qa.Rs.HomePage;
 using ShopQaLoginPage = Cas31.PageObjects.Shop.Qa.Rs.LoginPage;
+using Excel = Microsoft.Office.Interop.Excel;
+using Cas31.Libraries;
 
 namespace Cas31
 {
@@ -90,16 +92,73 @@ namespace Cas31
         [Category("shop.qa.rs")]
         public void TestShopQaRsLogin()
         {
-            ShopQaHomePage home = new ShopQaHomePage(driver);
-            home.GoToPage();
-            ShopQaLoginPage login = home.ClickOnLoginLink();
-            home = login.Login("aaasa", "aaa");
-            if (home.WelcomeBack != null)
+            CSVHandler CSV = new CSVHandler();
+            Excel.Worksheet Sheet = CSV.OpenCSV(@"D:\Kurs\kurs-ddt.csv");
+
+            int rows = Sheet.UsedRange.Rows.Count;
+            int columns = Sheet.UsedRange.Columns.Count;
+            TestContext.WriteLine("Rows: {0}, Columns: {1}", rows, columns);
+
+            string name;
+            string username;
+            string password;
+            string expected;
+            string description;
+            bool hasFailedExpected = false;
+
+            for (int i = 2; i <= rows; i++)
             {
-                Assert.Pass();
+                name = Sheet.Cells[i, 1].Value;
+                username = Sheet.Cells[i, 2].Value;
+                password = Sheet.Cells[i, 3].Value;
+                expected = Sheet.Cells[i, 4].Value;
+                description = Sheet.Cells[i, 5].Value;
+                TestContext.Write("{0}: ", name);
+
+                ShopQaHomePage home = new ShopQaHomePage(driver);
+                home.GoToPage();
+                ShopQaLoginPage login = home.ClickOnLoginLink();
+                home = login.Login(username, password);
+
+                if (home.WelcomeBack != null) // Successful login
+                {
+                    if (expected == "pass")
+                    {
+                        TestContext.Write(" PASS ");
+                    }  else
+                    {
+                        TestContext.Write(" FAIL ");
+                        hasFailedExpected = true;
+                    }
+                }
+                else // Unsuccessful login
+                {
+                    if (expected == "fail")
+                    {
+                        TestContext.Write(" PASS ");
+                    }
+                    else
+                    {
+                        TestContext.Write(" FAIL ");
+                        hasFailedExpected = true;
+                    }
+                }
+
+                TestContext.WriteLine(" ({0})", description);
+
+                IWebElement logout = home.LinkLogout;
+                logout?.Click();
+
+            }
+
+            CSV.Close();
+
+            if (hasFailedExpected)
+            {
+                Assert.Fail("Some tests have unmet expected results.");
             } else
             {
-                Assert.Fail();
+                Assert.Pass();
             }
 
         }
@@ -107,7 +166,10 @@ namespace Cas31
         [TearDown]
         public void TearDown()
         {
-            driver.Close();
+            if (driver != null)
+            {
+                driver.Close();
+            }
         }
     }
 }

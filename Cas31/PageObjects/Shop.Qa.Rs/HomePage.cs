@@ -44,9 +44,25 @@ namespace Cas31.PageObjects.Shop.Qa.Rs
                 IWebElement element = null;
                 try
                 {
-                    wait.Until(EC.ElementIsVisible(By.XPath("//h2[contains(text(), 'Welcome back,')]")));
+                    //wait.Until(EC.ElementIsVisible(By.XPath("//h2[contains(text(), 'Welcome back,')]")));
                     element = this.driver.FindElement(By.XPath("//h2[contains(text(), 'Welcome back,')]"));
                 } catch (Exception)
+                {
+                }
+                return element;
+            }
+        }
+
+        public IWebElement LinkLogout
+        {
+            get
+            {
+                IWebElement element = null;
+                try
+                {
+                    element = this.driver.FindElement(By.XPath("//a[@href='/logout']"));
+                }
+                catch (Exception)
                 {
                 }
                 return element;

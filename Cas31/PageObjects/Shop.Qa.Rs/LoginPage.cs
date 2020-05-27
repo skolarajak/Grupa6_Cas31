@@ -67,14 +67,14 @@ namespace Cas31.PageObjects.Shop.Qa.Rs
             }
         }
 
-        public HomePage Login(string username, string password )
+        public HomePage Login(string username, string password)
         {
             UsernameInput.SendKeys(username);
             PasswordInput.SendKeys(password);
             LoginButton.Click();
-            wait.Until(EC.ElementIsVisible(By.XPath("//h2[contains(text(), 'Welcome back,')]")));
+            //wait.Until(EC.ElementIsVisible(By.XPath("//h2[contains(text(), 'Welcome back,')]")));
+            System.Threading.Thread.Sleep(2000);
             return new HomePage(this.driver);
-
         }
 
     }
