@@ -6,6 +6,8 @@ using Cas31.PageObjects;
 using QaHomePage = Cas31.PageObjects.Qa.Rs.HomePage;
 using QaListPage = Cas31.PageObjects.Qa.Rs.ListPage;
 using QaRegisterPage = Cas31.PageObjects.Qa.Rs.RegisterPage;
+using ShopQaHomePage = Cas31.PageObjects.Shop.Qa.Rs.HomePage;
+using ShopQaLoginPage = Cas31.PageObjects.Shop.Qa.Rs.LoginPage;
 
 namespace Cas31
 {
@@ -82,6 +84,24 @@ namespace Cas31
             registracija.Newsletter.Click();
             registracija.Promotions.Click();
             registracija.RegisterButton.Click();
+        }
+
+        [Test]
+        [Category("shop.qa.rs")]
+        public void TestShopQaRsLogin()
+        {
+            ShopQaHomePage home = new ShopQaHomePage(driver);
+            home.GoToPage();
+            ShopQaLoginPage login = home.ClickOnLoginLink();
+            home = login.Login("aaasa", "aaa");
+            if (home.WelcomeBack != null)
+            {
+                Assert.Pass();
+            } else
+            {
+                Assert.Fail();
+            }
+
         }
 
         [TearDown]

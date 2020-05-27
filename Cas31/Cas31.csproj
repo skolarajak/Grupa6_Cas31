@@ -65,6 +65,8 @@
     <Compile Include="PageObjects\Qa.Rs\ListPage.cs" />
     <Compile Include="PageObjects\Qa.Rs\RegisterPage.cs" />
     <Compile Include="PageObjects\ResultsPage.cs" />
+    <Compile Include="PageObjects\Shop.Qa.Rs\HomePage.cs" />
+    <Compile Include="PageObjects\Shop.Qa.Rs\LoginPage.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestClass.cs" />
