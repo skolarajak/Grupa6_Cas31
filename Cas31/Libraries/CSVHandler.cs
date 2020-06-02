@@ -1,4 +1,5 @@
 ﻿using Excel = Microsoft.Office.Interop.Excel;
+using System.Runtime.InteropServices;
 
 namespace Cas31.Libraries
 {
@@ -15,6 +16,10 @@ namespace Cas31.Libraries
 
         public Excel.Worksheet OpenCSV(string CSVFile, string CSVDelimiter = ",")
         {
+            if (this.App == null)
+            {
+                this.App = new Excel.Application();
+            }
             this.Workbook = this.App.Workbooks.Open(CSVFile, Format: Excel.XlFileFormat.xlCSV, Delimiter: CSVDelimiter);
             this.Sheet = this.Workbook.ActiveSheet;
             return this.Sheet;
@@ -22,7 +27,14 @@ namespace Cas31.Libraries
 
         public void Close()
         {
+            this.Workbook.Close();
             this.App.Quit();
+
+            Marshal.ReleaseComObject(this.Workbook);
+            Marshal.ReleaseComObject(this.App);
+
+            this.Workbook = null;
+            this.App = null;
         }
     }
 }

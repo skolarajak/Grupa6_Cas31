@@ -5,26 +5,25 @@ using EC = SeleniumExtras.WaitHelpers.ExpectedConditions;
 
 namespace Cas31.PageObjects.Shop.Qa.Rs
 {
-    class LoginPage
+    class CartPage
     {
         private IWebDriver driver;
         private WebDriverWait wait;
 
-        public LoginPage(IWebDriver driver)
+        public CartPage(IWebDriver driver)
         {
             this.driver = driver;
             this.wait = new WebDriverWait(driver, TimeSpan.FromSeconds(30));
         }
 
-        public IWebElement UsernameInput
+        public IWebElement ShippingColumn
         {
             get
             {
                 IWebElement element = null;
                 try
                 {
-                    wait.Until(EC.ElementIsVisible(By.Name("username")));
-                    element = this.driver.FindElement(By.Name("username"));
+                    element = this.driver.FindElement(By.XPath("//tr[contains(.,'Shipping')]/td[3]"));
                 }
                 catch (Exception)
                 {
@@ -33,15 +32,14 @@ namespace Cas31.PageObjects.Shop.Qa.Rs
             }
         }
 
-        public IWebElement PasswordInput
+        public IWebElement ButtonContinueShopping
         {
             get
             {
                 IWebElement element = null;
                 try
                 {
-                    wait.Until(EC.ElementIsVisible(By.Name("password")));
-                    element = this.driver.FindElement(By.Name("password"));
+                    element = this.driver.FindElement(By.XPath("//a[contains(., 'Continue shopping')]"));
                 }
                 catch (Exception)
                 {
@@ -50,15 +48,14 @@ namespace Cas31.PageObjects.Shop.Qa.Rs
             }
         }
 
-        public IWebElement LoginButton
+        public IWebElement ButtonCheckout
         {
             get
             {
                 IWebElement element = null;
                 try
                 {
-                    wait.Until(EC.ElementIsVisible(By.Name("login")));
-                    element = this.driver.FindElement(By.Name("login"));
+                    element = this.driver.FindElement(By.Name("checkout"));
                 }
                 catch (Exception)
                 {
@@ -67,13 +64,18 @@ namespace Cas31.PageObjects.Shop.Qa.Rs
             }
         }
 
-        public HomePage Login(string username, string password)
+        public HomePage ClickContinueShopping()
         {
-            UsernameInput.SendKeys(username);
-            PasswordInput.SendKeys(password);
-            LoginButton.Click();
+            this.ButtonContinueShopping?.Click();
             wait.Until(EC.ElementIsVisible(By.XPath("//h2[contains(text(), 'Welcome back,')]")));
             return new HomePage(this.driver);
+        }
+
+        public ConfirmationPage ClickCheckout()
+        {
+            this.ButtonCheckout?.Click();
+            wait.Until(EC.ElementIsVisible(By.XPath("//h2[contains(text(), 'You have successfully placed your order.')]")));
+            return new ConfirmationPage(this.driver);
         }
 
     }

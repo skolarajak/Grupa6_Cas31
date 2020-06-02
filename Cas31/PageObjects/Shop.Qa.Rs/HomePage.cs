@@ -70,11 +70,103 @@ namespace Cas31.PageObjects.Shop.Qa.Rs
         }
 
 
+        public IWebElement PackagePro
+        {
+            get
+            {
+                IWebElement element;
+                try
+                {
+                    wait.Until(EC.ElementIsVisible(By.XPath("//h3[contains(., 'pro')]//parent::div//following-sibling::div")));
+                    element = this.driver.FindElement(By.XPath("//h3[contains(., 'pro')]//parent::div//following-sibling::div"));
+                }
+                catch (Exception)
+                {
+                    element = null;
+                }
+                return element;
+            }
+        }
+
+        public IWebElement PackageProQuantity
+        {
+            get
+            {
+                IWebElement element;
+                try
+                {
+                    wait.Until(EC.ElementIsVisible(By.XPath("//h3[contains(., 'pro')]//parent::div//following-sibling::div//select")));
+                    element = this.driver.FindElement(By.XPath("//h3[contains(., 'pro')]//parent::div//following-sibling::div//select"));
+                }
+                catch (Exception)
+                {
+                    element = null;
+                }
+                return element;
+            }
+        }
+
+        public IWebElement PackageProOrder
+        {
+            get
+            {
+                IWebElement element;
+                try
+                {
+                    wait.Until(EC.ElementIsVisible(By.XPath("//h3[contains(., 'pro')]//parent::div//following-sibling::div//input[@type='submit']")));
+                    element = this.driver.FindElement(By.XPath("//h3[contains(., 'pro')]//parent::div//following-sibling::div//input[@type='submit']"));
+                }
+                catch (Exception)
+                {
+                    element = null;
+                }
+                return element;
+            }
+        }
+
+        public IWebElement LinkViewCart
+        {
+            get
+            {
+                IWebElement element;
+                try
+                {
+                    element = this.driver.FindElement(By.PartialLinkText("View shopping cart"));
+                }
+                catch (Exception)
+                {
+                    element = null;
+                }
+                return element;
+            }
+        }
+
+
         public LoginPage ClickOnLoginLink()
         {
             this.LinkLogin?.Click();
             wait.Until(EC.ElementIsVisible(By.ClassName("form-signin-heading")));
             return new LoginPage(this.driver);
+        }
+
+        public void SelectQuantity(IWebElement element, string quantity)
+        {
+            SelectElement select = new SelectElement(element);
+            select.SelectByText(quantity);
+        }
+
+        public CartPage ClickOnOrderPro()
+        {
+            this.PackageProOrder?.Click();
+            wait.Until(EC.ElementIsVisible(By.XPath("//h1[contains(.,'Cart')]")));
+            return new CartPage(this.driver);
+        }
+
+        public CartPage ClickOnViewCart()
+        {
+            this.LinkViewCart?.Click();
+            wait.Until(EC.ElementIsVisible(By.XPath("//h1[contains(.,'Cart')]")));
+            return new CartPage(this.driver);
         }
 
     }

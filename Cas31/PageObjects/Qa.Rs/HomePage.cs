@@ -56,7 +56,6 @@ namespace Cas31.PageObjects.Qa.Rs
             }
         }
 
-
         public ListPage ClickOnListLink()
         {
             this.LinkListUsers?.Click();

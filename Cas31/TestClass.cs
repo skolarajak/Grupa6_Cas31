@@ -93,11 +93,12 @@ namespace Cas31
         public void TestShopQaRsLogin()
         {
             CSVHandler CSV = new CSVHandler();
-            Excel.Worksheet Sheet = CSV.OpenCSV(@"D:\Kurs\kurs-ddt.csv");
+            Excel.Worksheet Sheet = CSV.OpenCSV(@"D:\Kurs\ddt.csv");
 
             int rows = Sheet.UsedRange.Rows.Count;
             int columns = Sheet.UsedRange.Columns.Count;
             TestContext.WriteLine("Rows: {0}, Columns: {1}", rows, columns);
+            FileManagement.WriteLine("Rows: " + rows.ToString() + " Columns: " + columns.ToString());
 
             string name;
             string username;
@@ -114,6 +115,7 @@ namespace Cas31
                 expected = Sheet.Cells[i, 4].Value;
                 description = Sheet.Cells[i, 5].Value;
                 TestContext.Write("{0}: ", name);
+                FileManagement.Write(name);
 
                 ShopQaHomePage home = new ShopQaHomePage(driver);
                 home.GoToPage();
@@ -125,9 +127,11 @@ namespace Cas31
                     if (expected == "pass")
                     {
                         TestContext.Write(" PASS ");
+                        FileManagement.Write(" PASS ");
                     }  else
                     {
                         TestContext.Write(" FAIL ");
+                        FileManagement.Write(" FAIL ");
                         hasFailedExpected = true;
                     }
                 }
@@ -136,19 +140,21 @@ namespace Cas31
                     if (expected == "fail")
                     {
                         TestContext.Write(" PASS ");
+                        FileManagement.Write(" PASS ");
                     }
                     else
                     {
                         TestContext.Write(" FAIL ");
+                        FileManagement.Write(" FAIL ");
                         hasFailedExpected = true;
                     }
                 }
 
                 TestContext.WriteLine(" ({0})", description);
+                FileManagement.WriteLine(" " + description);
 
                 IWebElement logout = home.LinkLogout;
                 logout?.Click();
-
             }
 
             CSV.Close();
